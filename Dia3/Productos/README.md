@@ -280,3 +280,154 @@ from pedido where (fecha_esperada - fecha_entrega) >=2;
 +---------------+----------------+----------------+---------------+
 (8 rows)
 ```
+
+<p> 11. Devuelve un listado de todos los pedidos que fueron rechazados en 2009.</p>
+
+```sql
+SELECT codigo_pedido, fecha_pedido, codigo_cliente FROM pedido
+WHERE estado = 'Rechazado' AND EXTRACT(YEAR FROM fecha_pedido) = 2009;
+
++---------------+--------------+----------------+
+| codigo_pedido | fecha_pedido | codigo_cliente |
++---------------+--------------+----------------+
+|            14 | 2009-01-02   |              7 |
+|            21 | 2009-01-09   |              9 |
+|            25 | 2009-02-02   |              1 |
+|            26 | 2009-02-06   |              3 |
+|            40 | 2009-03-09   |             19 |
+|            46 | 2009-04-03   |             23 |
+|            65 | 2009-02-02   |              1 |
+|            66 | 2009-02-06   |              3 |
+|            74 | 2009-01-14   |             15 |
+|            81 | 2009-01-18   |             28 |
+|           101 | 2009-03-07   |             16 |
+|           105 | 2009-02-14   |             30 |
+|           120 | 2009-03-07   |             16 |
+|           125 | 2009-02-14   |             30 |
++---------------+--------------+----------------+
+(14 rows)
+```
+
+<p> 12. Devuelve un listado de todos los pedidos que han sido entregados en el mes de enero de cualquier año.</p>
+
+```sql
+SELECT codigo_pedido, fecha_pedido, codigo_cliente from pedido where extract(month from fecha_pedido)='01';
+
++---------------+--------------+----------------+
+| codigo_pedido | fecha_pedido | codigo_cliente |
++---------------+--------------+----------------+
+|             1 | 2006-01-17   |              5 |
+|             4 | 2009-01-20   |              5 |
+|            10 | 2009-01-15   |              3 |
+|            11 | 2009-01-20   |              1 |
+|            12 | 2009-01-22   |              1 |
+|            13 | 2009-01-12   |              7 |
+|            14 | 2009-01-02   |              7 |
+|            15 | 2009-01-09   |              7 |
+|            16 | 2009-01-06   |              7 |
+|            17 | 2009-01-08   |              7 |
+|            18 | 2009-01-05   |              9 |
+|            19 | 2009-01-18   |              9 |
+|            20 | 2009-01-20   |              9 |
+|            21 | 2009-01-09   |              9 |
+|            22 | 2009-01-11   |              9 |
+|            32 | 2007-01-07   |              4 |
+|            54 | 2009-01-11   |             14 |
+|            57 | 2009-01-05   |             13 |
+|            58 | 2009-01-24   |              3 |
+|            61 | 2009-01-15   |              3 |
+|            62 | 2009-01-20   |              1 |
+|            63 | 2009-01-22   |              1 |
+|            64 | 2009-01-24   |              1 |
+|            74 | 2009-01-14   |             15 |
+|            75 | 2009-01-11   |             15 |
+|            77 | 2009-01-03   |             15 |
+|            79 | 2009-01-12   |             28 |
+|            80 | 2009-01-25   |             28 |
+|            81 | 2009-01-18   |             28 |
+|            82 | 2009-01-20   |             28 |
+|            83 | 2009-01-24   |             28 |
+|            95 | 2008-01-04   |             35 |
+|            98 | 2009-01-08   |             35 |
+|           100 | 2009-01-10   |             16 |
+|           103 | 2009-01-15   |             30 |
+|           114 | 2009-01-15   |             36 |
+|           119 | 2009-01-10   |             16 |
+|           123 | 2009-01-15   |             30 |
++---------------+--------------+----------------+
+(38 rows)
+```
+
+<p> 13. Devuelve un listado con todos los pagos que se realizaron en el año 2008 mediante Paypal. Ordene el resultado de mayor a menor.</p>
+
+```sql
+SELECT codigo_cliente, total FROM pago WHERE EXTRACT(YEAR FROM fecha_pago) = 2008
+AND forma_pago = 'Paypal' ORDER BY total DESC;
+
++----------------+-------+
+| codigo_cliente | total |
++----------------+-------+
+(0 rows)
+```
+
+<p> 14. Devuelve un listado con todas las formas de pago que aparecen en la tabla pago. Tenga en cuenta que no deben aparecer formas de pago repetidas.</p>
+
+```sql
+select distinct forma_pago from pago;
+
++---------------+
+|  forma_pago   |
++---------------+
+| Cheque        |
+| Transferencia |
+| PayPal        |
++---------------+
+(3 rows)
+```
+<p> 15. Devuelve un listado con todos los productos que pertenecen a la gama Ornamentales y que tienen más de 100 unidades en stock. El listado deberá estar ordenado por su precio de venta, mostrando en primer lugar los de mayor precio.</p>
+
+```sql
+SELECT nombre, cantidad_en_stock, precio_venta FROM producto  WHERE gama = 'Ornamentales'
+AND cantidad_en_stock > 100 ORDER BY precio_venta DESC;
+
++----------------------------------------------+-------------------+--------------+
+|                    nombre                    | cantidad_en_stock | precio_venta |
++----------------------------------------------+-------------------+--------------+
+| Forsytia Intermedia \"Lynwood\"              |               120 |         7.00 |
+| Hibiscus Syriacus  \"Diana\" -Blanco Puro    |               120 |         7.00 |
+| Hibiscus Syriacus  \"Helene\" -Blanco-C.rojo |               120 |         7.00 |
+| Hibiscus Syriacus \"Pink Giant\" Rosa        |               120 |         7.00 |
+| Prunus pisardii                              |               120 |         5.00 |
+| Viburnum Tinus \"Eve Price\"                 |               120 |         5.00 |
+| Weigelia \"Bristol Ruby\"                    |               120 |         5.00 |
+| Escallonia (Mix)                             |               120 |         5.00 |
+| Evonimus Emerald Gayeti                      |               120 |         5.00 |
+| Evonimus Pulchellus                          |               120 |         5.00 |
+| Lonicera Nitida                              |               120 |         5.00 |
+| Laurus Nobilis Arbusto - Ramificado Bajo     |               120 |         5.00 |
+| Lonicera Nitida \"Maigrum\"                  |               120 |         5.00 |
+| Lonicera Pileata                             |               120 |         5.00 |
+| Philadelphus \"Virginal\"                    |               120 |         5.00 |
++----------------------------------------------+-------------------+--------------+
+(15 rows)
+
+```
+<p> 16. Devuelve un listado con todos los clientes que sean de la ciudad de Madrid y cuyo representante de ventas tenga el código de empleado 11 o 30.</p>
+
+```sql
+select * from cliente where ciudad = 'Madrid' and (codigo_empleado_rep_ventas = '11'
+or codigo_empleado_rep_ventas = '30');
+
++-----------------------------+-----------------+-----------+--------+----------------------------+
+|       nombre_cliente        | nombre_contacto | telefono  | ciudad | codigo_empleado_rep_ventas | 
++-----------------------------+-----------------+-----------+--------+----------------------------+
+| Beragua                     | Jose            | 654987321 | Madrid |                         11 |
+| Club Golf Puerta del hierro | Paco            | 62456810  | Madrid |                         11 |
+| Naturagua                   | Guillermo       | 689234750 | Madrid |                         11 |
+| DaraDistribuciones          | David           | 675598001 | Madrid |                         11 |
+| Madrileña de riegos         | Jose            | 655983045 | Madrid |                         11 |
+| Jardin de Flores            | Javier          | 654865643 | Madrid |                         30 |
+| Naturajardin                | Victoria        | 612343529 | Madrid |                         30 |
++-----------------------------+-----------------+-----------+--------+----------------------------+
+(7 rows)
+```
